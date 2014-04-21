@@ -6,12 +6,14 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
-public class Stacker extends JFrame implements KeyListener {
+public class Stacker extends JPanel implements KeyListener {
   /**
 	 * 
 	 */
@@ -28,19 +30,17 @@ public class Stacker extends JFrame implements KeyListener {
 	static boolean press = false;
 	static boolean forward = true;
 	static boolean start = true;
+	
+	private JPanel gamePanel;
 
-	public static void main(String[] args) { 
-		
-		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		new Stacker();
-		
-	}
-
+	/**
+	 * 
+	 */
 	public Stacker() {
-	  
-		setDefaultCloseOperation(3);
-		this.b = new JLabel[m][n];
+		super();
 		setLayout(new GridLayout(n, m));
+		
+		this.b = new JLabel[m][n];
 	  
 		for (int y = 0; y < n; y++) {
 			for (int x = 0; x < m; x++) {
@@ -51,18 +51,20 @@ public class Stacker extends JFrame implements KeyListener {
 				this.b[x][y].setOpaque(true);
 				this.b[x][y].setBorder(BorderFactory.createLineBorder(Color.GRAY));
 				this.b[x][y].setPreferredSize(new Dimension(40, 30));
+				//this.b[x][y].setFocusable(true);
+				//this.b[x][y].setRequestFocusEnabled(true);
 			}
 		}
-	  
+		
 		setFocusable(true);
 		addKeyListener(this);
-		pack();
-		setVisible(true);
-		go();
-	  
+		//go();
 	}
-
+	
+	
 	public void go() {
+		//requestFocusInWindow();
+		System.out.println("Go method called");
 		
 		int tmp = 0;
 		Component temporaryLostComponent = null;
@@ -70,9 +72,8 @@ public class Stacker extends JFrame implements KeyListener {
 		do {
 			if (forward)
 				forward();
-			else {
+			else
 				back();
-			}
 			
 			if (deltax[1] == 10 - length[1])
 				forward = false;
@@ -80,7 +81,11 @@ public class Stacker extends JFrame implements KeyListener {
 				forward = true;
 			}
 			
-			draw();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					draw();
+				}
+			});
 			
 			try {
 				Thread.sleep((long)time);
@@ -138,32 +143,44 @@ public class Stacker extends JFrame implements KeyListener {
 	}
 
   	public void forward() {
+  		//System.out.println("forward method called");
   		deltax[0] = deltax[1];
   		deltax[1] += 1;
   	}
 
   	public void back() {
+  		//System.out.println("back method called");
   		deltax[0] = deltax[1];
   		deltax[1] -= 1;
   	}
 
   	public void draw() {
   		
+  		//System.out.println("draw method called");
+  		
   		for (int x = 0; x < length[1]; x++) {
   			this.b[(x + deltax[0])][layer].setBackground(Color.white);
   		}
 
-  		for (int x = 0; x < length[1]; x++)
+  		for (int x = 0; x < length[1]; x++) {
   			this.b[(x + deltax[1])][layer].setBackground(Color.BLUE);
+  			//this.b[(x + deltax[1])][layer].grabFocus();
+  			//this.b[(x + deltax[1])][layer].repaint();
+  			//this.b[(x + deltax[1])][layer].revalidate();
+  			//System.out.println("this.b[(x + deltax[1])][layer]: " + this.b[(x + deltax[1])][layer].getBackground());
+  		}
   	}
 
   	public void keyPressed(KeyEvent e) {
-  		if (e.getKeyCode() == 32)
+  		if (e.getKeyCode() == 32) {//spacebar pressed
   			press = true;
+  			System.out.println("keyboard pressed");
+  		}
   	}
 
   	public void keyReleased(KeyEvent arg0) {}
 
   	public void keyTyped(KeyEvent arg0) {}
+
   	
 }

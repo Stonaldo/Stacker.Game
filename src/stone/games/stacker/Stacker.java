@@ -209,7 +209,7 @@ public class Stacker extends JPanel implements KeyListener {
   		}
 
   		for (int x = 0; x < length[1]; x++) {
-  			this.b[(x + deltax[1])][layer].setBackground(Color.BLUE);
+  			this.b[(x + deltax[1])][layer].setBackground(Color.RED);
   			//this.b[(x + deltax[1])][layer].grabFocus();
   			//this.b[(x + deltax[1])][layer].repaint();
   			//this.b[(x + deltax[1])][layer].revalidate();

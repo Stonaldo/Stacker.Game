@@ -193,6 +193,10 @@ public class Stacker extends JPanel implements KeyListener {
   		deltax[1] -= 1;
   	}
 
+  	/**
+  	 * Uses the current values of deltax/length/layer to update the backgrounds 
+  	 * of the appropriate grids.
+  	 */
   	public void draw() {
   		
   		//System.out.println("draw method called");

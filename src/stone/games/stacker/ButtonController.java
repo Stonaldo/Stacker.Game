@@ -19,6 +19,11 @@ public class ButtonController implements ActionListener {
 			game.runGame();
 		}
 		
+		if (e.getActionCommand().equals("Reset Game")) {
+			System.out.println("Reset button clicked - screen should reset");
+			game.resetGame();
+		}
+		
 
 	}
 	

@@ -13,6 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * 
+ * @author James Stone
+ *
+ */
+
 public class Stacker extends JPanel implements KeyListener {
   /**
 	 * 
@@ -30,10 +36,15 @@ public class Stacker extends JPanel implements KeyListener {
 	private boolean press;
 	private boolean forward;
 	private boolean start;
-	private goThread gameTask;
+	private GoThread gameTask;
 	
 	public boolean newGameFlag = true;
 	
+	/**
+	 * Resets all the variables to their initial state ready for a new game to start.
+	 * 
+	 * @param args None
+	 */
 	private void initVarsForNewGame() {
 		System.out.println("initVarsForNewGame method called!");
 		this.iteration = 1;
@@ -54,9 +65,6 @@ public class Stacker extends JPanel implements KeyListener {
 		}
 	}
 
-	/**
-	 * 
-	 */
 	public Stacker() {
 		super();
 		setLayout(new GridLayout(n, m));
@@ -82,7 +90,10 @@ public class Stacker extends JPanel implements KeyListener {
 		//go();
 	}
 	
-	
+	/**
+	 * Runs a game of Stacker. Handles the movement of the blocks, reacts to spacebar presses, 
+	 * and ends the game when the player wins/loses.
+	 */
 	public void go() {
 		
 		if (this.newGameFlag)
@@ -214,11 +225,16 @@ public class Stacker extends JPanel implements KeyListener {
   	public void keyTyped(KeyEvent arg0) {}
   	
   	public void runGame() {
-		gameTask = new goThread();
+		gameTask = new GoThread();
 		gameTask.start();  		
   	}
   	
-  	final class goThread extends Thread {
+  	public void resetGame() {
+  		initVarsForNewGame();
+  		gameTask.stop();
+  	}
+  	
+  	final class GoThread extends Thread {
   		public void run() {
   			newGameFlag = true;
   			go();

@@ -18,20 +18,41 @@ public class Stacker extends JPanel implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	int iteration = 1;
-	static double time = 200;
-	static int last = 0;
+	int iteration;
+	private double time;
+	private int last;
 	static int m = 10;
 	static int n = 20;
 	JLabel[][] b;
-	static int[] length = { 5, 5 };
-	static int layer = 19;
-	static int[] deltax = new int[2];
-	static boolean press = false;
-	static boolean forward = true;
-	static boolean start = true;
+	static int[] length = { 5, 5 };;
+	private int layer;
+	private int[] deltax;
+	private boolean press;
+	private boolean forward;
+	private boolean start;
+	private goThread gameTask;
 	
-	private JPanel gamePanel;
+	public boolean newGameFlag = true;
+	
+	private void initVarsForNewGame() {
+		System.out.println("initVarsForNewGame method called!");
+		this.iteration = 1;
+		this.time = 200;
+		this.last = 0;
+		this.layer = 19;
+		this.deltax = new int[2];
+		this.press = false;
+		this.forward = true;
+		this.start = true;
+		length[0] = 5;
+		length[1] = 5;
+		
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				this.b[j][i].setBackground(Color.white);
+			}
+		}
+	}
 
 	/**
 	 * 
@@ -63,7 +84,12 @@ public class Stacker extends JPanel implements KeyListener {
 	
 	
 	public void go() {
-		//requestFocusInWindow();
+		
+		if (this.newGameFlag)
+			initVarsForNewGame();
+			this.newGameFlag = false;
+		
+		requestFocusInWindow();
 		System.out.println("Go method called");
 		
 		int tmp = 0;
@@ -110,12 +136,14 @@ public class Stacker extends JPanel implements KeyListener {
 		
 		if ((layer == -1) && (length[1] > 0)) {
 			JOptionPane.showMessageDialog(temporaryLostComponent, "Congratulations! You beat the game!");
-			System.exit(0);
+			//System.exit(0); //if you want the program to exit after every game.
+			gameTask.stop();
 		}
 		
 		if (length[1] <= 0) {
 			JOptionPane.showMessageDialog(temporaryLostComponent, "Game over! You reached line " + (18 - layer) + "!");
-			System.exit(0);
+			//System.exit(0); //if you want the program to exit after every game.
+			gameTask.stop();
 		}
 		
 		last = deltax[1];
@@ -158,6 +186,9 @@ public class Stacker extends JPanel implements KeyListener {
   		
   		//System.out.println("draw method called");
   		
+  		System.out.println("deltax[0]: " + deltax[0]);
+  		System.out.println("deltax[1]: " + deltax[1]);
+  		
   		for (int x = 0; x < length[1]; x++) {
   			this.b[(x + deltax[0])][layer].setBackground(Color.white);
   		}
@@ -181,6 +212,18 @@ public class Stacker extends JPanel implements KeyListener {
   	public void keyReleased(KeyEvent arg0) {}
 
   	public void keyTyped(KeyEvent arg0) {}
-
   	
+  	public void runGame() {
+		gameTask = new goThread();
+		gameTask.start();  		
+  	}
+  	
+  	final class goThread extends Thread {
+  		public void run() {
+  			newGameFlag = true;
+  			go();
+  		}
+  	}
+
 }
+

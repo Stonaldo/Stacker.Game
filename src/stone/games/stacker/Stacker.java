@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -37,6 +38,10 @@ public class Stacker extends JPanel implements KeyListener {
 	private boolean forward;
 	private boolean start;
 	private GoThread gameTask;
+	private ImageIcon ladder = new ImageIcon(((new ImageIcon(getClass()
+			.getResource("ladder50x50.png"))).getImage())
+			.getScaledInstance(40, 30, java.awt.Image.SCALE_SMOOTH));
+	//new ImageIcon("images/pic.jpg")).getImage()).getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));  
 	
 	public boolean newGameFlag = true;
 	
@@ -60,7 +65,8 @@ public class Stacker extends JPanel implements KeyListener {
 		
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				this.b[j][i].setBackground(Color.white);
+				//this.b[j][i].setBackground(Color.white);
+				this.b[j][i].setIcon(null);
 			}
 		}
 	}
@@ -68,6 +74,8 @@ public class Stacker extends JPanel implements KeyListener {
 	public Stacker() {
 		super();
 		setLayout(new GridLayout(n, m));
+		
+		
 		
 		this.b = new JLabel[m][n];
 	  
@@ -205,11 +213,13 @@ public class Stacker extends JPanel implements KeyListener {
   		System.out.println("deltax[1]: " + deltax[1]);
   		
   		for (int x = 0; x < length[1]; x++) {
-  			this.b[(x + deltax[0])][layer].setBackground(Color.white);
+  			//this.b[(x + deltax[0])][layer].setBackground(Color.white);
+  			this.b[(x + deltax[0])][layer].setIcon(null);
   		}
 
   		for (int x = 0; x < length[1]; x++) {
-  			this.b[(x + deltax[1])][layer].setBackground(Color.RED);
+  			this.b[(x + deltax[1])][layer].setIcon(ladder);
+  			//this.b[(x + deltax[1])][layer].setBackground(Color.RED);
   			//this.b[(x + deltax[1])][layer].grabFocus();
   			//this.b[(x + deltax[1])][layer].repaint();
   			//this.b[(x + deltax[1])][layer].revalidate();
